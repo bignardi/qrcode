@@ -3,12 +3,20 @@ from flask import request, send_file
 from app import app
 from app.controllers import qr_controller
 
-qr_ctr = qr_controller.QRController()
-qr_controller = qr_ctr
+qr_controller = qr_controller.QRController()
 
-@app.route('/generate_qr', methods=['POST'])
-def generate_qr():
-    data = request.json.get('data')
-    qr_img_path = qr_controller.generate_qr(data)
+@app.route('/generate_qr', methods=['GET', 'POST'])
+@app.route('/generate_qr/<parametro_url>', methods=['GET', 'POST'])
+def generate_qr(parametro_url=None):
+    if request.method == 'POST':
+        # Se a solicitação for POST, tente obter 'data' do corpo JSON
+        data = request.json.get('data')
+    else:
+        # Se a solicitação for GET, use o parâmetro_url
+        data = parametro_url
 
-    return send_file(qr_img_path, mimetype='image/png')
+    if data:
+        qr_img_path = qr_controller.generate_qr(data)
+        return send_file(qr_img_path, mimetype='image/png')
+    else:
+        return "Texto não fornecido.", 400
