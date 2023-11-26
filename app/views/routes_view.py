@@ -5,8 +5,8 @@ from app.controllers import qr_controller
 
 qr_controller = qr_controller.QRController()
 
-@app.route('/generate_qr', methods=['GET', 'POST'])
-@app.route('/generate_qr/<parametro_url>', methods=['GET', 'POST'])
+@app.route('/texto', methods=['GET', 'POST'])
+@app.route('/texto/<parametro_url>', methods=['GET', 'POST'])
 def generate_qr(parametro_url=None):
     if request.method == 'POST':
         # Se a solicitação for POST, tente obter 'data' do corpo JSON
